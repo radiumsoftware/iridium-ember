@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'iridium/ember/version'
 
 Gem::Specification.new do |gem|
-  gem.name          = "ember"
+  gem.name          = "iridium-ember"
   gem.version       = Iridium::Ember::VERSION
-  gem.authors       = [""]
-  gem.email         = [""]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.authors       = ["Adam Hawkins"]
+  gem.email         = ["me@brodcastingdam.com"]
+  gem.description   = %q{Ember integration for Iridium}
+  gem.summary       = %q{}
+  gem.homepage      = "https://github.com/radiumsoftware/iridium-ember"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
