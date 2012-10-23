@@ -1,0 +1,1 @@
+require 'iridium/ember'
