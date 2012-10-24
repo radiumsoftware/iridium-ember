@@ -7,4 +7,5 @@ module Iridium
   end
 end
 
+require 'iridium/ember/handlebars_precompiler'
 require 'iridium/ember/engine'
