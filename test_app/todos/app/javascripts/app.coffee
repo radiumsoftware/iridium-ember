@@ -26,15 +26,7 @@
 #
 # Your application begins here...
 
-Todos = Ember.Namespace.create
-  createApp: ->
-    app = Todos.App.create()
-    $.each Todos, (key, value) ->
-      app[key] = value if value && value.isClass && key != 'constructor'
-
-    @app   = app
-
-Todos.App = Em.Application.extend
+Todos = Em.Application.create
   rootElement: $("#application"),
   initialize: ->
     router = Todos.Router.create()

@@ -13,5 +13,4 @@
 
 require 'todos/app'
 
-Todos.createApp()
-Todos.app.initialize()
+Todos.initialize()
