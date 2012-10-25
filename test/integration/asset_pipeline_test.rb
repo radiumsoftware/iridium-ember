@@ -3,6 +3,10 @@ require 'test_helper'
 class AssetPipelineTest < MiniTest::Unit::TestCase
   include ActiveSupport::Testing::Isolation
 
+  def config
+    app.config
+  end
+
   def test_templates_are_loaded_on_ember
     create_file "app/templates/home.hbs", "Hello {{name}}!"
 
@@ -13,6 +17,8 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_templates_are_compiled_at_runtime_in_development
+    config.dependencies.skip :ember, "ember-debug"
+
     create_file "app/templates/home.hbs", "Hello {{name}}!"
 
     compile :development ; assert_file "site/application.js"
@@ -22,6 +28,8 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_handlbars_templates_are_precompiled_in_production
+    config.dependencies.skip :ember, "ember-debug"
+
     create_file "app/templates/home.hbs", "Hello {{name}}!"
 
     compile :production ; assert_file "site/application.js"
@@ -31,7 +39,18 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_inline_handlebars_templates_are_precompiled_in_production
-    skip
+    config.dependencies.skip :ember, "ember-debug"
+
+    create_file "app/javascripts/view.js", <<-js
+      App.MyView = Ember.View.extend({
+        defaultTemplate: Ember.Handlebars.compile('Hello {{name}}')
+      })
+    js
+
+    compile :production ; assert_file "site/application.js"
+
+    content = read "site/application.js"
+    refute_match content, /Ember\.Handlebars\.compile/
   end
 
   def test_ember_asserts_are_stripped_in_production
