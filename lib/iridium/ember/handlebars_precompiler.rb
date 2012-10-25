@@ -1,5 +1,3 @@
-require 'test_helper'
-
 module Iridium
   module Ember
     class HandlebarsPrecompiler
