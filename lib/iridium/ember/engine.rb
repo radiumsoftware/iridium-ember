@@ -1,7 +1,7 @@
 module Iridium
   module Ember
     class Engine < Iridium::Engine
-      config.dependencies.load "ember-debug"
+      config.dependencies.load "ember-debug", :after => :jquery
       config.dependencies.skip :ember
 
       config.handlebars.target = 'Ember.TEMPLATES'
