@@ -1,13 +1,7 @@
 require 'test_helper'
 
 class AssetPipelineTest < MiniTest::Unit::TestCase
-  def test_loads_ember
-    compile
-    assert_file "site/application.js"
-
-    content = read "site/application.js"
-    assert_includes content, "Ember"
-  end
+  include ActiveSupport::Testing::Isolation
 
   def test_templates_are_loaded_on_ember
     create_file "app/templates/home.hbs", "Hello {{name}}!"

@@ -1,5 +1,5 @@
 Iridium::Ember::Engine.configure do
-  config.dependencies.swap :handlebars, "handlebars-runtime"
+  config.dependencies.swap "ember-debug", :ember
 
   config.handlebars.compiler = Iridium::Ember::HandlebarsPrecompiler
 

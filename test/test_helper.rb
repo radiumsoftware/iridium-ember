@@ -10,6 +10,8 @@ require 'iridium/ember'
 require 'minitest/unit'
 require 'minitest/autorun'
 
+require 'active_support/testing/isolation'
+
 Dir[File.expand_path('../support/**/*.rb', __FILE__)].each do |file|
   require file
 end
