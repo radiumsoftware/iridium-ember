@@ -27,10 +27,7 @@
 # Your application begins here...
 
 Todos = Em.Application.create
-  rootElement: $("#application"),
-  initialize: ->
-    router = Todos.Router.create()
-    @_super(router)
+  rootElement: $("#application")
 
 Todos.ApplicationController = Ember.Controller.extend()
 Todos.ApplicationView = Ember.View.extend
