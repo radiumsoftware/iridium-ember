@@ -29,9 +29,27 @@
 Todos = Em.Application.create
   rootElement: $("#application")
 
+Todos.View = Ember.View.extend
+  # override templateForName to look in this application's
+  # namespace. Example: app/templates/application.hbs can
+  # be accessed using: templateName: 'application' even 
+  # though it's stored as 'todos/application'
+  templateForName: (name, type) ->
+    return unless name
+
+    namespace = @constructor.toString().split('.')[0].underscore()
+
+    templates = Ember.get @, 'templates'
+    template = Ember.get templates, "#{namespace}/#{name}"
+
+    if !template
+      throw new Ember.Error(fmt('%@ - Unable to find %@ "%@".', [@, type, name]))
+
+    return template
+
 Todos.ApplicationController = Ember.Controller.extend()
-Todos.ApplicationView = Ember.View.extend
-  templateName: 'todos/application'
+Todos.ApplicationView = Todos.View.extend
+  templateName: 'application'
 
 Todos.Router = Ember.Router.extend
   enableLogging: true
