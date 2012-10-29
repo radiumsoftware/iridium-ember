@@ -16,4 +16,6 @@ module Iridium
 end
 
 require 'iridium/ember/handlebars_precompiler'
+require 'iridium/ember/handlebars_file_compiler'
+require 'iridium/ember/inline_handlebars_compiler'
 require 'iridium/ember/engine'

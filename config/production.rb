@@ -1,7 +1,7 @@
 Iridium::Ember::Engine.configure do
   config.dependencies.swap "ember-debug", :ember
 
-  config.handlebars.compiler = Iridium::Ember::HandlebarsPrecompiler
+  config.handlebars.compiler = Iridium::Ember::HandlebarsFileCompiler
 
   js do |pipeline|
     pipeline.strip %r{^(\s)*Ember\.(assert|deprecate|warn)\((.*)\).*$}
@@ -9,7 +9,7 @@ Iridium::Ember::Engine.configure do
 
   js do |pipeline|
     pipeline.replace /(Ember\.Handlebars\.compile)\(['"](.+)['"]\)/ do |foo, _, template|
-      Iridium::Ember::HandlebarsPrecompiler.call template
+      Iridium::Ember::InlineHandlebarsCompiler.call template
     end
   end
 end

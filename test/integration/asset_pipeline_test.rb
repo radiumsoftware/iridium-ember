@@ -50,6 +50,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     compile :production ; assert_file "site/application.js"
 
     content = read "site/application.js"
+    assert_match content, /Ember\.Handlebars\.template\(.+\)[^;]/
     refute_match content, /Ember\.Handlebars\.compile/
   end
 

@@ -4,7 +4,7 @@ require 'json'
 class PrecompilerTest < MiniTest::Unit::TestCase
   def test_returns_a_template
     result = compile "Hello {{name}}"
-    assert_match result, /Ember\.Handlebars\.template\(.+\);/m
+    assert result
   end
 
   def test_compiles_templates_with_quotes
@@ -28,6 +28,6 @@ class PrecompilerTest < MiniTest::Unit::TestCase
 
   private
   def compile(template)
-    Iridium::Ember::HandlebarsPrecompiler.call template
+    Iridium::Ember::HandlebarsPrecompiler.compile template
   end
 end
