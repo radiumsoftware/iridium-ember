@@ -1,3 +1,5 @@
+require 'JSON'
+
 module Iridium
   module Ember
     class HandlebarsPrecompiler
@@ -8,7 +10,15 @@ module Iridium
       end
 
       def compile(source)
-        template = context.call "IridiumEmber.precompile", source
+        # if the source is a prescaped JSON string then 
+        # it should be parse, else just use it as is
+        content = begin
+                    JSON.load source
+                  rescue JSON::ParserError
+                    source
+                  end
+
+        template = context.call "IridiumEmber.precompile", content
         "Ember.Handlebars.template(#{template});"
       end
 
