@@ -20,6 +20,8 @@ module Iridium
 
         template = context.call "IridiumEmber.precompile", content
         "Ember.Handlebars.template(#{template});"
+      rescue ExecJS::ProgramError => ex
+        raise PrecompilerError.new(source, ex)
       end
 
       def ember_path

@@ -20,6 +20,12 @@ class PrecompilerTest < MiniTest::Unit::TestCase
     assert result
   end
 
+  def test_raises_an_error_on_bad_templates
+    assert_raises Iridium::Ember::PrecompilerError do
+      compile "Hello {{"
+    end
+  end
+
   private
   def compile(template)
     Iridium::Ember::HandlebarsPrecompiler.call template
