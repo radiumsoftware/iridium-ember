@@ -51,7 +51,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     content = read "site/application.js"
     assert_match content, /Ember\.Handlebars\.template\(.+\)[^;]/
-    refute_match content, /Ember\.Handlebars\.compile/
+    refute_match content, /\sEmber\.Handlebars\.compile/
   end
 
   def test_inline_handles_with_em_namespace_are_compiled
@@ -66,7 +66,8 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     compile :production ; assert_file "site/application.js"
 
     content = read "site/application.js"
-    assert_match content, /Ember\.Handlebars\.template\(.+\)[^;]/
+
+    assert_match content, /\sEmber\.Handlebars\.template\(.+\)[^;]/
     refute_match content, /Ember\.Handlebars\.compile/
   end
 

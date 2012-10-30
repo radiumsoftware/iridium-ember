@@ -8,7 +8,7 @@ Iridium::Ember::Engine.configure do
   end
 
   js do |pipeline|
-    pipeline.replace /([Ember|Em]\.Handlebars\.compile)\(['"](.+)['"]\)/ do |foo, _, template|
+    pipeline.replace /((?:Ember|Em)\.Handlebars\.compile)\(['"](.+)['"]\)/ do |foo, _, template|
       Iridium::Ember::InlineHandlebarsCompiler.call template
     end
   end
