@@ -54,7 +54,25 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     refute_match content, /Ember\.Handlebars\.compile/
   end
 
+  def test_inline_handles_with_em_namespace_are_compiled
+    config.dependencies.skip :ember, "ember-debug"
+
+    create_file "app/javascripts/view.js", <<-js
+      App.MyView = Ember.View.extend({
+        defaultTemplate: Em.Handlebars.compile('Hello {{name}}')
+      })
+    js
+
+    compile :production ; assert_file "site/application.js"
+
+    content = read "site/application.js"
+    assert_match content, /Ember\.Handlebars\.template\(.+\)[^;]/
+    refute_match content, /Ember\.Handlebars\.compile/
+  end
+
   def test_ember_asserts_are_stripped_in_production
+    config.dependencies.skip :ember, "ember-debug"
+
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.assert 'ember assertion'
     coffee
@@ -66,6 +84,8 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_ember_warning_are_stripped_in_production
+    config.dependencies.skip :ember, "ember-debug"
+
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.warn 'ember warning'
     coffee
@@ -77,6 +97,8 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_ember_deprecations_are_stripped_in_production
+    config.dependencies.skip :ember, "ember-debug"
+
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.deprecate 'ember deprecation'
     coffee
