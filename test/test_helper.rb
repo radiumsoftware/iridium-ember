@@ -24,6 +24,7 @@ class MiniTest::Unit::TestCase
     FileUtils.mkdir_p app.site_path
     FileUtils.mkdir_p app.tmp_path
     FileUtils.mkdir_p app.vendor_path
+    FileUtils.mkdir_p app.build_path
   end
 
   def teardown
@@ -31,6 +32,7 @@ class MiniTest::Unit::TestCase
     FileUtils.rm_rf app.site_path
     FileUtils.rm_rf app.tmp_path
     FileUtils.rm_rf app.vendor_path
+    FileUtils.rm_rf app.build_path
   end
 
   def create_file(path, content)

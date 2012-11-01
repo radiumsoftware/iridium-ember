@@ -21,7 +21,7 @@ class PrecompilerTest < MiniTest::Unit::TestCase
   end
 
   def test_raises_an_error_on_bad_templates
-    assert_raises Iridium::Ember::PrecompilerError do
+    assert_raises Barber::PrecompilerError do
       compile "Hello {{"
     end
   end
