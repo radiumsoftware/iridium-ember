@@ -6,6 +6,5 @@ gemspec
 gem 'iridium', :github => 'radiumsoftware/iridium'
 gem 'rake-pipeline', :github => 'livingsocial/rake-pipeline'
 gem 'hydrogen', :github => 'radiumsoftware/hydrogen'
-gem 'barber', :github => 'tchak/barber'
 gem 'debugger'
 gem 'm'

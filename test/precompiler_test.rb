@@ -28,6 +28,9 @@ class PrecompilerTest < MiniTest::Unit::TestCase
 
   private
   def compile(template)
-    Iridium::Ember::HandlebarsPrecompiler.compile template
+    stub_app = stub :handlebars_path => Iridium.vendor_path.join("handlebars.js"),
+      :ember_path => nil
+    compiler = Iridium::Ember::HandlebarsPrecompiler.new stub_app
+    compiler.compile template
   end
 end

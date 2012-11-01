@@ -1,6 +1,6 @@
 module Iridium
   module Ember
-    class InlineHandlebarsCompiler
+    class InlineHandlebarsPrecompiler
       class << self
         def call(template)
           "Ember.Handlebars.template(#{compile(template)})"
@@ -11,5 +11,14 @@ module Iridium
         end
       end
     end
+
+    class HandlebarsFilePrecompiler < InlineHandlebarsPrecompiler
+      class << self
+        def call(template)
+          "#{super};"
+        end
+      end
+    end
   end
 end
+

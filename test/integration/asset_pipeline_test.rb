@@ -7,6 +7,21 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     app.config
   end
 
+  def handlebars_path
+    Iridium.vendor_path.join "handlebars.js"
+  end
+
+  def ember_path
+    File.expand_path "../../../vendor/javascripts/ember.js", __FILE__
+  end
+
+  def setup
+    super
+
+    create_file "vendor/javascripts/handlebars.js", File.read(handlebars_path)
+    create_file "vendor/javascripts/ember.js", File.read(ember_path)
+  end
+
   def test_templates_are_loaded_on_ember
     create_file "app/templates/home.hbs", "Hello {{name}}!"
 
