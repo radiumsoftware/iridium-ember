@@ -3,13 +3,9 @@ Iridium::Ember::Engine.configure do
 
   config.handlebars.compiler = Iridium::Ember::HandlebarsFilePrecompiler
 
-  js do |pipeline|
-    pipeline.strip %r{^\s*(Ember|Em)\.(assert|deprecate|warn)\((.*)\).*$}
-  end
+  config.handlebars.inline_compiler = Iridium::Ember::InlinePrecompilerFilter
 
   js do |pipeline|
-    pipeline.replace /((?:Ember|Em)\.Handlebars\.compile)\(['"](.+)['"]\)/ do |foo, _, template|
-      Iridium::Ember::InlineHandlebarsPrecompiler.call template
-    end
+    pipeline.strip %r{^\s*(Ember|Em)\.(assert|deprecate|warn)\((.*)\).*$}
   end
 end

@@ -9,4 +9,5 @@ end
 require 'iridium/ember/application'
 require 'iridium/ember/handlebars_precompiler'
 require 'iridium/ember/precompilers'
+require 'iridium/ember/inline_precompiler_filter'
 require 'iridium/ember/engine'
