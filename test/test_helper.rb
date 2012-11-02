@@ -5,7 +5,7 @@ require 'debugger'
 
 ENV['IRIDIUM_ENV'] = "test"
 
-require 'iridium/ember'
+require 'iridium-ember'
 
 require 'minitest/unit'
 require 'minitest/autorun'
