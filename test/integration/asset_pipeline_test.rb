@@ -39,6 +39,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     compile :development ; assert_file "site/application.js"
 
     content = read "site/application.js"
+
     assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.compile\(.+\);/m
   end
 
@@ -65,12 +66,13 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     compile :production ; assert_file "site/application.js"
 
     content = read "site/application.js"
+
     assert_match content, /Ember\.Handlebars\.template\(.+\)[^;]/
     refute_match content, /\sEmber\.Handlebars\.compile/
   end
 
   def test_inline_handles_with_em_namespace_are_compiled
-    config.dependencies.skip :ember, "ember-debug"
+    config.dependencies.skip :ember
 
     create_file "app/javascripts/view.js", <<-js
       App.MyView = Ember.View.extend({
