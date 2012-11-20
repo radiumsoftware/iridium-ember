@@ -20,6 +20,8 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     create_file "vendor/javascripts/handlebars.js", File.read(handlebars_path)
     create_file "vendor/javascripts/ember.js", File.read(ember_path)
+
+    config.dependencies.skip :ember, :handlebars
   end
 
   def test_templates_are_loaded_on_ember
@@ -32,9 +34,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_templates_are_compiled_at_runtime_in_development
-    config.dependencies.skip :ember
-
-    create_file "app/templates/home.hbs", "Hello {{name}}!"
+    create_file "app/templates/home.hbs", "Hello {{name}}"
 
     compile :development ; assert_file "site/application.js"
 
@@ -44,19 +44,16 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_handlbars_templates_are_precompiled_in_production
-    config.dependencies.skip :ember
-
-    create_file "app/templates/home.hbs", "Hello {{name}}!"
+    create_file "app/templates/home.hbs", "Hello {{name}}"
 
     compile :production ; assert_file "site/application.js"
 
     content = read "site/application.js"
+
     assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.template\(.+\);/m
   end
 
   def test_inline_handlebars_templates_are_precompiled_in_production
-    config.dependencies.skip :ember
-
     create_file "app/javascripts/view.js", <<-js
       App.MyView = Ember.View.extend({
         defaultTemplate: Ember.Handlebars.compile('Hello {{name}}')
@@ -69,11 +66,14 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     assert_match content, /Ember\.Handlebars\.template\(.+\)[^;]/
     refute_match content, /\sEmber\.Handlebars\.compile/
+
+    compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
+
+    assert_includes content, compiled_template, 
+      "Template did not compile correctly!"
   end
 
   def test_inline_handles_with_em_namespace_are_compiled
-    config.dependencies.skip :ember
-
     create_file "app/javascripts/view.js", <<-js
       App.MyView = Ember.View.extend({
         defaultTemplate: Em.Handlebars.compile('Hello {{name}}')
@@ -86,11 +86,14 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     assert_match content, /\sEmber\.Handlebars\.template\(.+\)[^;]/
     refute_match content, /Ember\.Handlebars\.compile/
+
+    compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
+
+    assert_includes content, compiled_template, 
+      "Template did not compile correctly!"
   end
 
   def test_ember_asserts_are_stripped_in_production
-    config.dependencies.skip :ember
-
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.assert 'ember assertion'
     coffee
@@ -102,8 +105,6 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_ember_warning_are_stripped_in_production
-    config.dependencies.skip :ember
-
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.warn 'ember warning'
     coffee
@@ -115,8 +116,6 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_ember_deprecations_are_stripped_in_production
-    config.dependencies.skip :ember
-
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.deprecate 'ember deprecation'
     coffee
