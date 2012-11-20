@@ -32,7 +32,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_templates_are_compiled_at_runtime_in_development
-    config.dependencies.skip :ember, "ember-debug"
+    config.dependencies.skip :ember
 
     create_file "app/templates/home.hbs", "Hello {{name}}!"
 
@@ -43,7 +43,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_handlbars_templates_are_precompiled_in_production
-    config.dependencies.skip :ember, "ember-debug"
+    config.dependencies.skip :ember
 
     create_file "app/templates/home.hbs", "Hello {{name}}!"
 
@@ -54,7 +54,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_inline_handlebars_templates_are_precompiled_in_production
-    config.dependencies.skip :ember, "ember-debug"
+    config.dependencies.skip :ember
 
     create_file "app/javascripts/view.js", <<-js
       App.MyView = Ember.View.extend({
@@ -87,7 +87,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_ember_asserts_are_stripped_in_production
-    config.dependencies.skip :ember, "ember-debug"
+    config.dependencies.skip :ember
 
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.assert 'ember assertion'
@@ -100,7 +100,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_ember_warning_are_stripped_in_production
-    config.dependencies.skip :ember, "ember-debug"
+    config.dependencies.skip :ember
 
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.warn 'ember warning'
@@ -113,7 +113,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   end
 
   def test_ember_deprecations_are_stripped_in_production
-    config.dependencies.skip :ember, "ember-debug"
+    config.dependencies.skip :ember
 
     create_file "app/javascripts/ember.coffee", <<-coffee
       Ember.deprecate 'ember deprecation'
