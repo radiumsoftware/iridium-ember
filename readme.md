@@ -11,8 +11,6 @@ apps.
 * Precompile standalone Handlebars templates
 * Precompile inline Handlebars templates
 * Strip Ember asserts from your code
-* Use a ember-debug in development and ember in production
-* Swap out handlebars for handlebars-runtime in production
 * Generate an app skeleton
 
 ## Installation

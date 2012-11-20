@@ -1,6 +1,4 @@
 Iridium::Ember::Engine.configure do
-  config.dependencies.swap "ember-debug", :ember
-
   config.handlebars.compiler = Iridium::Ember::HandlebarsFilePrecompiler
 
   config.handlebars.inline_compiler = Iridium::Ember::InlinePrecompilerFilter
