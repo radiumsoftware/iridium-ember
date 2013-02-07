@@ -61,4 +61,8 @@ class MiniTest::Unit::TestCase
   def read(*path)
     File.read app.root.join(*path)
   end
+
+  def handlebars_path
+    File.expand_path "../../generators/ember/application/templates/vendor/javascripts/ember-template-compiler.js", __FILE__
+  end
 end

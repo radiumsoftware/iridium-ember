@@ -5,16 +5,8 @@ module Iridium
         @app = app
       end
 
-      def ember
-        @ember ||= File.new(ember_path)
-      end
-
       def handlebars
-        @handlbars ||= File.new(@app.handlebars_path)
-      end
-
-      def ember_path
-        @app.ember_path || File.expand_path("../../../../vendor/javascripts/ember.js", __FILE__)
+        @handlbars ||= File.new(@app.ember_template_compiler_path)
       end
     end
   end

@@ -1,138 +1,127 @@
-# require 'test_helper'
+require 'test_helper'
 
-# class AssetPipelineTest < MiniTest::Unit::TestCase
-#   include ActiveSupport::Testing::Isolation
+class AssetPipelineTest < MiniTest::Unit::TestCase
+  include ActiveSupport::Testing::Isolation
 
-#   def config
-#     app.config
-#   end
+  def config
+    app.config
+  end
 
-#   def handlebars_path
-#     Iridium.vendor_path.join "handlebars.js"
-#   end
+  def setup
+    super
 
-#   def ember_path
-#     File.expand_path "../../../vendor/javascripts/ember.js", __FILE__
-#   end
+    create_file "vendor/javascripts/ember-template-compiler.js", File.read(handlebars_path)
 
-#   def setup
-#     super
+    config.dependencies.skip :ember, :handlebars
+  end
 
-#     create_file "vendor/javascripts/handlebars.js", File.read(handlebars_path)
-#     create_file "vendor/javascripts/ember.js", File.read(ember_path)
+  def test_templates_are_loaded_on_ember
+    create_file "app/templates/home.hbs", "Hello {{name}}!"
 
-#     config.dependencies.skip :ember, :handlebars
-#   end
+    compile ; assert_file "site/application.js"
 
-#   def test_templates_are_loaded_on_ember
-#     create_file "app/templates/home.hbs", "Hello {{name}}!"
+    content = read "site/application.js"
+    assert_match content, /Ember\.TEMPLATES\['.+'\]=/
+  end
 
-#     compile ; assert_file "site/application.js"
+  def test_templates_are_compiled_at_runtime_in_development
+    create_file "app/templates/home.hbs", "Hello {{name}}"
 
-#     content = read "site/application.js"
-#     assert_match content, /Ember\.TEMPLATES\['.+'\]=/
-#   end
+    compile :development ; assert_file "site/application.js"
 
-#   def test_templates_are_compiled_at_runtime_in_development
-#     create_file "app/templates/home.hbs", "Hello {{name}}"
+    content = read "site/application.js"
 
-#     compile :development ; assert_file "site/application.js"
+    assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.compile\(.+\);/m
+  end
 
-#     content = read "site/application.js"
+  def test_handlbars_templates_are_precompiled_in_production
+    create_file "app/templates/home.hbs", "Hello {{name}}"
 
-#     assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.compile\(.+\);/m
-#   end
+    compile :production ; assert_file "site/application.js"
 
-#   def test_handlbars_templates_are_precompiled_in_production
-#     create_file "app/templates/home.hbs", "Hello {{name}}"
+    content = read "site/application.js"
 
-#     compile :production ; assert_file "site/application.js"
+    assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.template\(.+\);/m
+  end
 
-#     content = read "site/application.js"
+  def test_inline_handlebars_templates_are_precompiled_in_production
+    create_file "app/javascripts/view.js", <<-js
+      App.MyView = Ember.View.extend({
+        template: Ember.Handlebars.compile('Hello {{name}}')
+      })
+    js
 
-#     assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.template\(.+\);/m
-#   end
+    compile :production ; assert_file "site/application.js"
 
-#   def test_inline_handlebars_templates_are_precompiled_in_production
-#     create_file "app/javascripts/view.js", <<-js
-#       App.MyView = Ember.View.extend({
-#         defaultTemplate: Ember.Handlebars.compile('Hello {{name}}')
-#       })
-#     js
+    content = read "site/application.js"
 
-#     compile :production ; assert_file "site/application.js"
+    assert_match content, /template:\sEmber\.Handlebars\.template\(.+\)[^;]/
 
-#     content = read "site/application.js"
+    compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
 
-#     assert_match content, /Ember\.Handlebars\.template\(.+\)[^;]/
-#     refute_match content, /\sEmber\.Handlebars\.compile/
+    assert_includes content, compiled_template, 
+      "Template did not compile correctly!"
+  end
 
-#     compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
+  def test_inline_handles_with_em_namespace_are_compiled
+    create_file "app/javascripts/view.js", <<-js
+      App.MyView = Ember.View.extend({
+        template: Em.Handlebars.compile('Hello {{name}}')
+      })
+    js
 
-#     assert_includes content, compiled_template, 
-#       "Template did not compile correctly!"
-#   end
+    compile :production ; assert_file "site/application.js"
 
-#   def test_inline_handles_with_em_namespace_are_compiled
-#     create_file "app/javascripts/view.js", <<-js
-#       App.MyView = Ember.View.extend({
-#         defaultTemplate: Em.Handlebars.compile('Hello {{name}}')
-#       })
-#     js
+    content = read "site/application.js"
 
-#     compile :production ; assert_file "site/application.js"
+    assert_match content, /template:\sEmber\.Handlebars\.template\(.+\)[^;]/
 
-#     content = read "site/application.js"
+    compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
 
-#     assert_match content, /\sEmber\.Handlebars\.template\(.+\)[^;]/
-#     refute_match content, /Ember\.Handlebars\.compile/
+    assert_includes content, compiled_template, 
+      "Template did not compile correctly!"
+  end
 
-#     compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
+  def test_ember_asserts_are_stripped_in_production
+    create_file "app/javascripts/ember.coffee", <<-coffee
+      Ember.assert 'ember assertion'
+    coffee
 
-#     assert_includes content, compiled_template, 
-#       "Template did not compile correctly!"
-#   end
+    compile :production ; assert_file "site/application.js"
 
-#   def test_ember_asserts_are_stripped_in_production
-#     create_file "app/javascripts/ember.coffee", <<-coffee
-#       Ember.assert 'ember assertion'
-#     coffee
+    content = read "site/application.js"
+    refute_includes content, 'ember assertion'
+  end
 
-#     compile :production ; assert_file "site/application.js"
+  def test_ember_warning_are_stripped_in_production
+    create_file "app/javascripts/ember.coffee", <<-coffee
+      Ember.warn 'ember warning'
+    coffee
 
-#     content = read "site/application.js"
-#     refute_includes content, 'ember assertion'
-#   end
+    compile :production ; assert_file "site/application.js"
 
-#   def test_ember_warning_are_stripped_in_production
-#     create_file "app/javascripts/ember.coffee", <<-coffee
-#       Ember.warn 'ember warning'
-#     coffee
+    content = read "site/application.js"
+    refute_includes content, 'ember warning'
+  end
 
-#     compile :production ; assert_file "site/application.js"
+  def test_ember_deprecations_are_stripped_in_production
+    create_file "app/javascripts/ember.coffee", <<-coffee
+      Ember.deprecate 'ember deprecation'
+    coffee
 
-#     content = read "site/application.js"
-#     refute_includes content, 'ember warning'
-#   end
+    compile :production ; assert_file "site/application.js"
 
-#   def test_ember_deprecations_are_stripped_in_production
-#     create_file "app/javascripts/ember.coffee", <<-coffee
-#       Ember.deprecate 'ember deprecation'
-#     coffee
+    content = read "site/application.js"
+    refute_includes content, 'ember deprecartion'
+  end
 
-#     compile :production ; assert_file "site/application.js"
-
-#     content = read "site/application.js"
-#     refute_includes content, 'ember deprecartion'
-#   end
-
-#   private
-#   def compile(env = "test")
-#     ENV['IRIDIUM_ENV'] = env.to_s
-#     instance = TestApp.new
-#     instance.boot!
-#     instance.compile
-#   ensure
-#     ENV['IRIDIUM_ENV'] = "test"
-#   end
-# end
+  private
+  def compile(env = "test")
+    ENV['IRIDIUM_ENV'] = env.to_s
+    instance = TestApp.new
+    instance.boot!
+    instance.compile
+  ensure
+    ENV['IRIDIUM_ENV'] = "test"
+  end
+end
