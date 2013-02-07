@@ -1,0 +1,6 @@
+Ember.Handlebars.registerBoundHelper '<%= ember_helper_name %>', (value, options) ->
+  return unless value
+
+  formatted = Handlebars.Utils.escapeExpression value
+
+  new Handlebars.SafeString "<span class='<%= helper_class %>'>#{formatted}</span>"
