@@ -8,10 +8,10 @@ module Iridium
 
         argument :route_name, :type => :string
 
-        class_option :route, :type => :boolean, :alias => '-r', :default => false
+        class_option :route, :type => :boolean, :aliases => '-r', :default => false
         class_option :controller, :type => :boolean, :alias => '-c', :default => false
-        class_option :view, :type => :boolean, :alias => '-v', :default => false
-        class_option :full, :type => :boolean, :alias => '-f', :default => false
+        class_option :view, :type => :boolean, :aliases => '-v', :default => false
+        class_option :full, :type => :boolean, :aliases => '-a', :default => false
 
         def route
           template "route.coffee.tt", "app/javascripts/#{namespaced_file_name}.coffee"
