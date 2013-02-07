@@ -4,6 +4,6 @@ Iridium::Ember::Engine.configure do
   config.handlebars.inline_compiler = Iridium::Ember::InlinePrecompilerFilter
 
   js do |pipeline|
-    pipeline.strip %r{^\s*(Ember|Em)\.(assert|deprecate|warn)\((.*)\).*$}
+    pipeline.strip %r{^\s*(Ember|Em)\.(assert|deprecate|warn|debug)\((.*)\).*$}
   end
 end

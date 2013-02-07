@@ -115,6 +115,17 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     refute_includes content, 'ember deprecartion'
   end
 
+  def test_ember_debug_calls_are_stripped_in_production
+    create_file "app/javascripts/ember.coffee", <<-coffee
+      Ember.debug 'debugger!'
+    coffee
+
+    compile :production ; assert_file "site/application.js"
+
+    content = read "site/application.js"
+    refute_includes content, 'debugger!'
+  end
+
   private
   def compile(env = "test")
     ENV['IRIDIUM_ENV'] = env.to_s
