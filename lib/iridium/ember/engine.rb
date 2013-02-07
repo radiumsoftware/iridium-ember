@@ -3,7 +3,7 @@ module Iridium
     class Engine < Iridium::Engine
       config.dependencies.insert_after :jquery, :ember
 
-      config.dependencies.skip "ember-template-compiler"
+      config.dependencies.skip "ember-template-compiler", "ember.min"
 
       config.handlebars.target = 'Ember.TEMPLATES'
 

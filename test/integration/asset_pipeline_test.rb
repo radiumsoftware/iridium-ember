@@ -24,6 +24,32 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     refute_includes content, "PRECOMPILER"
   end
 
+  def test_ember_production_build_is_used
+    create_file "app/javascripts/foo.js", "one js file is needed"
+
+    create_file "vendor/javascripts/ember.min.js", "PRODUCTION BUILD"
+    create_file "vendor/javascripts/ember.js", "DEV BUILD"
+
+    compile :production ; assert_file "site/application.js"
+
+    content = read "site/application.js"
+    assert_includes content, "PRODUCTION BUILD"
+    refute_includes content, "DEV BUILD"
+  end
+
+  def test_ember_development_build_is_used
+    create_file "app/javascripts/foo.js", "one js file is needed"
+
+    create_file "vendor/javascripts/ember.min.js", "PRODUCTION BUILD"
+    create_file "vendor/javascripts/ember.js", "DEV BUILD"
+
+    compile :development ; assert_file "site/application.js"
+
+    content = read "site/application.js"
+    refute_includes content, "PRODUCTION BUILD"
+    assert_includes content, "DEV BUILD"
+  end
+
   def test_templates_are_loaded_on_ember
     create_file "app/templates/home.hbs", "Hello {{name}}!"
 
