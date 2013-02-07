@@ -11,8 +11,17 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     super
 
     create_file "vendor/javascripts/ember-template-compiler.js", File.read(handlebars_path)
+  end
 
-    config.dependencies.skip :ember, :handlebars
+  def test_ember_precompiler_is_not_compiled
+    create_file "app/javascripts/foo.js", "one js file is needed"
+
+    create_file "vendor/javascripts/ember-template-compiler.js", "PRECOMPILER"
+
+    compile ; assert_file "site/application.js"
+
+    content = read "site/application.js"
+    refute_includes content, "PRECOMPILER"
   end
 
   def test_templates_are_loaded_on_ember

@@ -18,5 +18,6 @@ class ApplicationGeneratorTest < GeneratorTestCase
 
     assert_file "vendor/javascripts/ember.js"
     assert_file "vendor/javascripts/ember-template-compiler.js"
+    assert_file "vendor/javascripts/ember.min.js"
   end
 end
