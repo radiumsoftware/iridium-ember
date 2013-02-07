@@ -7,6 +7,7 @@ module Iridium
 end
 
 require 'iridium/ember/application'
+require 'iridium/ember/generators'
 require 'iridium/ember/handlebars_precompiler'
 require 'iridium/ember/precompilers'
 require 'iridium/ember/inline_precompiler_filter'
