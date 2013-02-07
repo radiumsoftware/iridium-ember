@@ -5,6 +5,11 @@ class ApplicationGeneratorTest < GeneratorTestCase
     Iridium::Ember::Generators::ApplicationGenerator
   end
 
+  def test_generator_naming
+    assert_equal 'ember', command.namespace
+    assert_equal 'application', command.generator_name
+  end
+
   def test_generator_creates_ember_files
     invoke "application"
 

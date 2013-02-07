@@ -1,0 +1,1 @@
+<%= camelized %>.<%= camelized_class_name %>Route = Ember.Route.extend()
