@@ -14,7 +14,6 @@ module Iridium
         class_option :full, :type => :boolean, :aliases => '-a', :default => false
 
         def route
-          template "route.coffee.tt", "app/javascripts/#{namespaced_file_name}.coffee"
           template "template.hbs.tt", "app/templates/#{namespaced_file_name}.hbs"
 
           template "stylesheet.scss.tt", "app/stylesheets/#{namespaced_file_name}.scss"
