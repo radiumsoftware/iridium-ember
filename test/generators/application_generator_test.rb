@@ -17,6 +17,8 @@ class ApplicationGeneratorTest < GeneratorTestCase
     assert_file "app/javascripts/routes/application_route.coffee"
     assert_file "app/templates/application.hbs"
 
+    assert_file "app/javascripts/helpers"
+
     assert_file "vendor/javascripts/ember.js"
     assert_file "vendor/javascripts/ember-template-compiler.js"
     assert_file "vendor/javascripts/ember.min.js"
