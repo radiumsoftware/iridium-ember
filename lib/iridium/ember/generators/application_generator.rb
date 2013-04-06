@@ -10,7 +10,7 @@ module Iridium
 
           %w(ember.js ember.min.js ember-template-compiler.js).each do |path|
             create_file "vendor/javascripts/#{path}" do
-              ::Ember::Source.bundled_path_for(path)
+              File.read(::Ember::Source.bundled_path_for(path))
             end
           end
         end
