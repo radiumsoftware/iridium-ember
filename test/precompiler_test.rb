@@ -28,7 +28,8 @@ class PrecompilerTest < MiniTest::Unit::TestCase
 
   private
   def compile(template)
-    stub_app = mock :ember_template_compiler_path => handlebars_path
+    stub_app = mock :handlebars_path => handlebars_path,
+      :ember_template_compiler_path => ::Ember::Source.bundled_path_for('ember-template-compiler.js')
 
     compiler = Iridium::Ember::HandlebarsPrecompiler.new stub_app
     compiler.compile template

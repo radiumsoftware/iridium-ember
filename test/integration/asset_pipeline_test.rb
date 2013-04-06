@@ -10,7 +10,8 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
   def setup
     super
 
-    create_file "vendor/javascripts/ember-template-compiler.js", File.read(handlebars_path)
+    create_file "vendor/javascripts/handlebars.js", File.read(::Handlebars::Source.bundled_path)
+    create_file "vendor/javascripts/ember-template-compiler.js", File.read(::Ember::Source.bundled_path_for('ember-template-compiler.js'))
   end
 
   def test_ember_precompiler_is_not_compiled
@@ -56,7 +57,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
     compile ; assert_file "site/application.js"
 
     content = read "site/application.js"
-    assert_match content, /Ember\.TEMPLATES\['.+'\]=/
+    assert_match /Ember\.TEMPLATES\['.+'\]=/, content
   end
 
   def test_templates_are_compiled_at_runtime_in_development
@@ -66,7 +67,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     content = read "site/application.js"
 
-    assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.compile\(.+\);/m
+    assert_match /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.compile\(.+\);/m, content
   end
 
   def test_handlbars_templates_are_precompiled_in_production
@@ -76,7 +77,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     content = read "site/application.js"
 
-    assert_match content, /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.template\(.+\);/m
+    assert_match /Ember\.TEMPLATES\['.+'\]=Ember\.Handlebars\.template\(.+\);/m, content
   end
 
   def test_inline_handlebars_templates_are_precompiled_in_production
@@ -90,7 +91,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     content = read "site/application.js"
 
-    assert_match content, /template:\sEmber\.Handlebars\.template\(.+\)[^;]/
+    assert_match /template:\sEmber\.Handlebars\.template\(.+\)[^;]/, content
 
     compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
 
@@ -109,7 +110,7 @@ class AssetPipelineTest < MiniTest::Unit::TestCase
 
     content = read "site/application.js"
 
-    assert_match content, /template:\sEmber\.Handlebars\.template\(.+\)[^;]/
+    assert_match /template:\sEmber\.Handlebars\.template\(.+\)[^;]/, content
 
     compiled_template = Iridium::Ember::HandlebarsPrecompiler.compile 'Hello {{name}}'
 

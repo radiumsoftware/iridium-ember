@@ -7,7 +7,12 @@ module Iridium
         desc "Generate an ember.js application structure"
         def application
           directory "app"
-          directory "vendor"
+
+          %w(ember.js ember.min.js ember-template-compiler.js).each do |path|
+            create_file "vendor/javascripts/#{path}" do
+              ::Ember::Source.bundled_path_for(path)
+            end
+          end
         end
       end
     end

@@ -63,6 +63,6 @@ class MiniTest::Unit::TestCase
   end
 
   def handlebars_path
-    File.expand_path "../../generators/ember/application/templates/vendor/javascripts/ember-template-compiler.js", __FILE__
+    ::Handlebars::Source.bundled_path
   end
 end
