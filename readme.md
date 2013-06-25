@@ -1,23 +1,25 @@
 # iridium-ember
 
-iridium-ember integrates Ember with
+iridium-ember integrates [Ember](http://emberjs.com/) with
 [Iridum](https://github.com/radiumsoftware/iridium). It is designed for
 new and experienced developers. New developers can use it get started
 quickly and experienced developers will see better performing production
-apps. 
+apps.
 
 ## Current Features
 
 * Precompile standalone Handlebars templates
 * Precompile inline Handlebars templates
-* Strip Ember asserts from your code
+* Strip `Ember.assert`s from your code (as well as `deprecate`, `warn`, and `debug`)
 * Generate an app skeleton
 
 ## Installation
 
-Add this line to your application's Gemfile:
+`iridium-ember` expects you to have [Iridum](https://github.com/radiumsoftware/iridium) installed.
 
-    gem 'iridium-ember'
+Add this line to the [`Gemfile` you created for Iridum](https://github.com/radiumsoftware/iridium/blob/master/README.md):
+
+    gem 'iridium-ember', :github => 'radiumsoftware/iridium-ember'
 
 And then execute:
 
@@ -29,12 +31,19 @@ Or install it yourself as:
 
 ## Usage
 
-In your `application.rb`
+Three simple steps:
 
-```ruby
-require 'iridium'
-require 'iridium-ember'
-```
+1. Generate an `iridium` application:
+
+        bundle exec iridium generate app my-app
+
+2. `cd` into your new app's directory:
+
+        cd my-app
+
+3. Run the ember generator:
+
+        bundle exec iridium generate ember:application
 
 That's it! You're good to go.
 
