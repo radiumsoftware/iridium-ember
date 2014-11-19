@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "barber"
-  gem.add_dependency "ember-source", "1.1.2"
+  gem.add_dependency "ember-source", "1.7.1"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "simplecov"
